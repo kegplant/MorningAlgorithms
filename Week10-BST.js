@@ -69,7 +69,7 @@ Node.prototype.min = function () {
         return this.left.min();
     } else {
         console.log('found min')
-        return this.val;
+        return this;
     }
 }
 BST.prototype.min = function () {
@@ -108,7 +108,7 @@ BST.prototype.count = function () {
     }
 }
 // console.log(theTree.count());
-/////////////////////////// display 
+/////////////////////////// display  //////////////////////
 BST.prototype.buffer = [];
 BST.prototype.nextBuffer = [];
 Node.prototype.displayHelper = function (buffer, nextBuffer) {
@@ -165,7 +165,8 @@ BST.prototype.display = function () {
 // pop first of buffer and call display Helper on it//starting putting children of buffer into next buffer
 
 // buffer non empty: pop buffer, and result's childre gets pushed into nextBuffer
-//////////////////////display in order
+
+//////////////////////display in order //////////////////////
 Node.prototype.inOrderDisplay=function(){
     if(this.left){
         this.left.inOrderDisplay();
@@ -183,3 +184,81 @@ BST.prototype.inOrderDisplay=function(){
     }    
 }
 theTree.inOrderDisplay();
+///////////////////////////Thursday remove by value, need to implement the comments
+BST.prototype.remove=function(val){
+    //special case of cannot find
+    //special case of root only / no root
+    var curr=this.find(val); //need to find it
+    //check that curr has right child
+    target=curr.right.min()
+    if(target.right){
+        target.parent.left=target.right;
+    }
+    curr.swapWithLeaf()            
+}
+
+//alternatively: get the tree to have prev,parity=false for left true for right
+//go through the tree to add parent attribute (or modify Node.prodotype.parent and BST.Add)
+Node.prototype.swapWithLeaf=function(leaf){
+    var reject=this;
+    if(reject.parent.left){
+    if(reject.val=reject.parent.left.val){
+            reject.parent.left=leaf;
+            leaf.left=reject.left;
+            leaf.right=reject.right;
+        }
+        else{
+            reject.parent.right=leaf;
+            leaf.left=reject.left;
+            leaf.right=reject.right;
+        }
+    }else{
+        reject.parent.right=leaf;
+        leaf.left=reject.left;
+        leaf.right=reject.right;
+    }   
+}
+
+/***************** height & isBalanced **********************/
+/* originally made an isBalanced function, which recursively calls height */
+Node.prototype.height=function(checkBalance=false){
+    var lc=0;
+    var rc=0;
+    if(this.left){
+        lc=this.left.height();
+    }
+    if(this.right){
+        rc=this.right.height();
+    }
+    if(checkBalance){
+        if(Math.abs(rc-lc)>=2){
+            return false
+        }else{
+           //unfinished code 
+        }
+    }else{
+        if(rc>lc){
+            return rc+1;
+        }else{
+            return lc+1;
+        }
+    }
+}
+console.log('height is: ',theTree.root.height(true))
+
+/* balance! */
+// keep it balanced upon add, so only need to deal with 4 base cases
+// four base cases: /, \, <, >
+///: right rotate; \: left rotate
+// <: turn into / then right rotate
+// >: turn into \ then left rotate
+
+
+
+
+
+
+
+
+
+
